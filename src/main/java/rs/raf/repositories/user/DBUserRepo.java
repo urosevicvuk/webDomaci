@@ -1,4 +1,11 @@
 package rs.raf.repositories.user;
 
-public class DBUserRepo {
+import rs.raf.entities.User;
+import rs.raf.repositories.DBAbstractRepo;
+
+public class DBUserRepo extends DBAbstractRepo implements UserRepo {
+    @Override
+    public User findUser(String username) {
+        return null;
+    }
 }
