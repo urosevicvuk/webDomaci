@@ -1,47 +1,53 @@
 package rs.raf.entities;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 public class Comment {
-    private Integer id;
-    private String content;
-    private Integer userId;
-    private Integer postId;
 
-    public Comment(String comment_text, Integer comment_userId, Integer comment_postId) {
-        this.content = comment_text;
-        this.userId = comment_userId;
-        this.postId = comment_postId;
+    @NotNull(message = "This field is required")
+    @NotEmpty(message = "This field is required")
+    private String author;
+
+    @NotNull(message = "This field is required")
+    @NotEmpty(message = "This field is required")
+    private String text;
+
+    private Integer blogPostId;
+
+    public Comment() {
     }
 
-    public Integer getId() {
-        return id;
+    public Comment(String author, String text, Integer blogPostId) {
+        this.author = author;
+        this.text = text;
+        this.blogPostId = blogPostId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public String getAuthor() {
+        return author;
     }
 
-    public String getContent() {
-        return content;
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public String getText() {
+        return text;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public void setText(String text) {
+        this.text = text;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public Integer getBlogPostId() {
+        return blogPostId;
     }
 
-    public Integer getPostId() {
-        return postId;
+    public void setBlogPostId(Integer blogPostId) {
+        this.blogPostId = blogPostId;
     }
-
-    public void setPostId(Integer postId) {
-        this.postId = postId;
-    }
-
 }
