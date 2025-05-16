@@ -40,6 +40,14 @@ public class Post {
         this.content = content;
     }
 
+    public Post(Integer id, LocalDateTime date, String author, String title, String content) {
+        this.id = id;
+        this.date = date;
+        this.author = author;
+        this.title = title;
+        this.content = content;
+    }
+
     public Integer getId() {
         return id;
     }

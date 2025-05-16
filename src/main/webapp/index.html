@@ -173,6 +173,21 @@
         #postDetailView {
             display: none;
         }
+
+        #loginView {
+            max-width: 400px;
+            margin: 100px auto;
+            background: #fff8f0;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        #loginView h2 {
+            margin-bottom: 20px;
+            color: #e65100;
+        }
     </style>
 
 
@@ -185,6 +200,15 @@
     </div>
     <div id="postsContainer">
         <!-- Posts will be loaded here -->
+    </div>
+</div>
+
+<div id="loginView">
+    <h2>Login</h2>
+    <div class="comment-form">
+        <input type="text" id="loginUsername" placeholder="Username">
+        <input type="password" id="loginPassword" placeholder="Password">
+        <button id="loginBtn">Log In</button>
     </div>
 </div>
 
@@ -229,6 +253,8 @@
     const cancelBtn = document.getElementById('cancelBtn');
     const backLink = document.querySelector('.back-link');
     const submitCommentBtn = document.getElementById('submitComment');
+    const loginView = document.getElementById('loginView');
+    const loginBtn = document.getElementById('loginBtn');
 
     let currentPostId = null;
 
@@ -354,12 +380,14 @@
         const author = document.getElementById('author').value;
         const title = document.getElementById('title').value;
         const content = document.getElementById('content').value;
+        const jwt = localStorage.getItem('jwt');
 
         try {
             const response = await fetch('http://localhost:8080/api/posts', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${jwt}`
                 },
                 body: JSON.stringify({ author, title, content })
             });
@@ -383,12 +411,14 @@
     submitCommentBtn.addEventListener('click', async () => {
         const author = document.getElementById('commentAuthor').value;
         const text = document.getElementById('commentText').value;
+        const jwt = localStorage.getItem('jwt');
 
         try {
             const response = await fetch(`http://localhost:8080/api/comments/${currentPostId}`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${jwt}`
                 },
                 body: JSON.stringify({ author, text })
             });
@@ -404,7 +434,39 @@
         }
     });
 
-    loadPosts();
+    loginBtn.addEventListener('click', async () => {
+        const username = document.getElementById('loginUsername').value;
+        const password = document.getElementById('loginPassword').value;
+
+        try {
+            const response = await fetch('http://localhost:8080/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem('jwt', data.jwt);
+
+                loginView.style.display = 'none';
+                postsView.style.display = 'block';
+                loadPosts();
+            } else {
+                alert('Login failed. Check credentials.');
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+        }
+    });
+
+    loginView.style.display = 'block';
+    postsView.style.display = 'none';
+    postDetailView.style.display = 'none';
+    newPostForm.style.display = 'none';
+
 </script>
 </body>
 </html>

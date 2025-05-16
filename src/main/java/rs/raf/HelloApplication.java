@@ -4,11 +4,17 @@ import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
 import rs.raf.repositories.comment.CommentRepository;
+import rs.raf.repositories.comment.DBCommentRepository;
 import rs.raf.repositories.comment.MemoryCommentRepository;
+import rs.raf.repositories.post.DBPostRepository;
 import rs.raf.repositories.post.MemoryPostRepository;
 import rs.raf.repositories.post.PostRepository;
+import rs.raf.repositories.user.DBUserRepository;
+import rs.raf.repositories.user.MemoryUserRepository;
+import rs.raf.repositories.user.UserRepository;
 import rs.raf.services.CommentService;
 import rs.raf.services.PostService;
+import rs.raf.services.UserService;
 
 import javax.inject.Singleton;
 import javax.ws.rs.ApplicationPath;
@@ -28,11 +34,17 @@ public class HelloApplication extends ResourceConfig {
             @Override
             protected void configure() {
                 // Memory repositories
-                this.bind(MemoryPostRepository.class).to(PostRepository.class).in(Singleton.class);
-                this.bind(MemoryCommentRepository.class).to(CommentRepository.class).in(Singleton.class);
+                //this.bind(MemoryPostRepository.class).to(PostRepository.class).in(Singleton.class);
+                //this.bind(MemoryCommentRepository.class).to(CommentRepository.class).in(Singleton.class);
+                //this.bind(MemoryUserRepository.class).to(UserRepository.class).in(Singleton.class);
+
+                this.bind(DBPostRepository.class).to(PostRepository.class).in(Singleton.class);
+                this.bind(DBCommentRepository.class).to(CommentRepository.class).in(Singleton.class);
+                this.bind(DBUserRepository.class).to(UserRepository.class).in(Singleton.class);
 
                 this.bindAsContract(PostService.class);
                 this.bindAsContract(CommentService.class);
+                this.bindAsContract(UserService.class);
             }
         };
         register(binder);
