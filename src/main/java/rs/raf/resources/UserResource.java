@@ -10,23 +10,30 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.HashMap;
+import java.util.Map;
 
 @Path("/users")
 public class UserResource {
-   @Inject
-   private UserService userService;
 
-   @POST
+    @Inject
+    private UserService userService;
+
+    @POST
     @Path("/login")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response login(@Valid LoginRequest loginRequest) {
-        // Map<String, String> response = new HashMap<>();
+    public Response login(@Valid LoginRequest loginRequest)
+    {
+        Map<String, String> response = new HashMap<>();
 
         String jwt = this.userService.login(loginRequest.getUsername(), loginRequest.getPassword());
         if (jwt == null) {
-            return Response.status(422, "Unprocessable Entity").entity("These credentials do not match our records").build();
+            response.put("message", "These credentials do not match our records");
+            return Response.status(422, "Unprocessable Entity").entity(response).build();
         }
 
-        return Response.ok(jwt).build();
-   }
+        response.put("jwt", jwt);
+
+        return Response.ok(response).build();
+    }
 }

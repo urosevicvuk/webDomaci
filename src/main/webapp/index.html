@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #fff7f0;
+            color: #3b2f2f;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            line-height: 1.7;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .header-container h1 {
+            margin: 0;
+            font-size: 2rem;
+            color: #bf360c;
+        }
+
+        #newPostBtn {
+            background: linear-gradient(to right, #ff6f00, #ffa726);
+            color: white;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        #newPostBtn:hover {
+            background: linear-gradient(to right, #e65100, #ff9800);
+        }
+
+        .post-preview h2 {
+            margin: 0 0 8px;
+            font-size: 1.6rem;
+            color: #e65100;
+        }
+
+        .post-date {
+            color: #8d6e63;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .read-more {
+            display: inline-block;
+            margin-top: 12px;
+            color: #ff6f00;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .read-more:hover {
+            text-decoration: underline;
+        }
+
+        .post-header {
+            margin-bottom: 30px;
+            border-bottom: 2px solid #ffe0b2;
+            padding-bottom: 20px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #ff6f00;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .comments-section {
+            margin-top: 40px;
+        }
+
+        .comments-section h3 {
+            font-size: 1.25rem;
+            margin-bottom: 15px;
+            color: #bf360c;
+        }
+
+        .comment-form {
+            margin-top: 30px;
+            padding: 20px;
+            background: #fff3e0;
+            border-radius: 6px;
+            border: 1px solid #ffd180;
+        }
+
+        .comment-form input,
+        .comment-form textarea {
+            width: 100%;
+            margin-bottom: 12px;
+            padding: 10px;
+            border: 1px solid #ffcc80;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .comment-form textarea {
+            height: 100px;
+        }
+
+        button,
+        #savePostBtn,
+        #cancelBtn,
+        #submitComment {
+            padding: 10px 16px;
+            background: #fb8c00;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.2s ease;
+        }
+
+        button:hover,
+        #savePostBtn:hover,
+        #submitComment:hover {
+            background: #ef6c00;
+        }
+
+        #cancelBtn {
+            background-color: #bcaaa4;
+            margin-left: 10px;
+        }
+
+        #cancelBtn:hover {
+            background-color: #a1887f;
+        }
+
+        #newPostForm {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background: #fff8f0;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        #newPostForm input,
+        #newPostForm textarea {
+            font-size: 14px;
+            padding: 10px;
+            margin-bottom: 12px;
+            border: 1px solid #ffcc80;
+            border-radius: 6px;
+            width: 90%
+        }
+
+        #postDetailView {
+            display: none;
+        }
+
+        #loginView {
+            max-width: 400px;
+            margin: 100px auto;
+            background: #fff8f0;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        #loginView h2 {
+            margin-bottom: 20px;
+            color: #e65100;
+        }
+    </style>
+
+
+</head>
+<body>
+<div id="postsView">
+    <div class="header-container">
+        <h1>Blog Posts</h1>
+        <button id="newPostBtn">New Post</button>
+    </div>
+    <div id="postsContainer">
+        <!-- Posts will be loaded here -->
+    </div>
+</div>
+
+<div id="loginView">
+    <h2>Login</h2>
+    <div class="comment-form">
+        <input type="text" id="loginUsername" placeholder="Username">
+        <input type="password" id="loginPassword" placeholder="Password">
+        <button id="loginBtn">Log In</button>
+    </div>
+</div>
+
+<div id="postDetailView">
+    <a class="back-link">← Back to all posts</a>
+    <div id="postContainer">
+        <!-- Single post will be loaded here -->
+    </div>
+    <div class="comments-section">
+        <h3>Comments</h3>
+        <div id="commentsContainer">
+            <!-- Comments will be loaded here -->
+        </div>
+        <div class="comment-form">
+            <h4>New comment</h4>
+            <input type="text" id="commentAuthor" placeholder="Name">
+            <textarea id="commentText" placeholder="Comment"></textarea>
+            <button id="submitComment">Submit</button>
+        </div>
+    </div>
+</div>
+
+<div id="newPostForm">
+    <h2>Create New Post</h2>
+    <input type="text" id="author" placeholder="Author">
+    <input type="text" id="title" placeholder="Title">
+    <textarea id="content" placeholder="Content"></textarea>
+    <button id="savePostBtn">Save Post</button>
+    <button id="cancelBtn">Cancel</button>
+</div>
+
+<script>
+    // DOM elements
+    const postsView = document.getElementById('postsView');
+    const postDetailView = document.getElementById('postDetailView');
+    const postsContainer = document.getElementById('postsContainer');
+    const postContainer = document.getElementById('postContainer');
+    const commentsContainer = document.getElementById('commentsContainer');
+    const newPostBtn = document.getElementById('newPostBtn');
+    const newPostForm = document.getElementById('newPostForm');
+    const savePostBtn = document.getElementById('savePostBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const backLink = document.querySelector('.back-link');
+    const submitCommentBtn = document.getElementById('submitComment');
+    const loginView = document.getElementById('loginView');
+    const loginBtn = document.getElementById('loginBtn');
+
+    let currentPostId = null;
+
+    // Load all posts
+    async function loadPosts() {
+        try {
+            const jwt = localStorage.getItem('jwt');
+            const response = await fetch('http://localhost:8080/api/posts', {
+                headers: {
+                    'Authorization': `Bearer ${jwt}`
+                }
+            });
+            const posts = await response.json();
+
+            postsContainer.innerHTML = '';
+            posts.forEach(post => {
+                const postDate = formatDate(post.date);
+                const postElement = document.createElement('div');
+                postElement.className = 'post-preview';
+                postElement.innerHTML = `
+                        <h2>${post.title}</h2>
+                        <div class="post-date">${postDate} • ${post.author}</div>
+                        <div>${post.content.substring(0, 200)}...</div>
+                        <a class="read-more" data-post-id="${post.id}">Opširnije...</a>
+                    `;
+                postsContainer.appendChild(postElement);
+            });
+
+            // Add click handlers to "Opširnije" links
+            document.querySelectorAll('.read-more').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    currentPostId = e.target.getAttribute('data-post-id');
+                    showPostDetail(currentPostId);
+                });
+            });
+        } catch (error) {
+            console.error('Error loading posts:', error);
+        }
+    }
+
+    // Show single post view
+    async function showPostDetail(postId) {
+        try {
+            // Load post
+            const jwt = localStorage.getItem('jwt');
+            const postResponse = await fetch(`http://localhost:8080/api/posts/${postId}`, {
+                headers: {
+                    'Authorization': `Bearer ${jwt}`
+                }
+            });
+            const post = await postResponse.json();
+
+            // Format date
+            const postDate = formatDate(post.date);
+            // Display post
+            postContainer.innerHTML = `
+                    <div class="post-header">
+                        <h1>${post.title}</h1>
+                        <div class="post-date">${postDate} • ${post.author}</div>
+                    </div>
+                    <div>${post.content}</div>
+                `;
+
+            // Load comments
+            await loadComments(postId);
+
+            document.getElementById("commentAuthor").value = getUsernameFromJWT();
+
+            // Switch views
+            postsView.style.display = 'none';
+            postDetailView.style.display = 'block';
+        } catch (error) {
+            console.error('Error loading post:', error);
+        }
+    }
+
+    function formatDate(dateString) {
+        if (!dateString) return 'No date';
+
+        // Split the backend's "dd-MM-yyyy" format
+        const [day, month, year] = dateString.split('-');
+        return `${day}.${month}.${year}.`;
+    }
+
+    // Load comments for a post
+    async function loadComments(postId) {
+        try {
+            const jwt = localStorage.getItem('jwt');
+            const response = await fetch(`http://localhost:8080/api/comments/${postId}`, {
+                headers: {
+                    'Authorization': `Bearer ${jwt}`
+                }
+            });
+            const comments = await response.json();
+
+            commentsContainer.innerHTML = '';
+            comments.forEach(comment => {
+                const commentElement = document.createElement('div');
+                commentElement.className = 'comment';
+                commentElement.innerHTML = `
+                        <div class="comment-author">${comment.author}</div>
+                        <div>${comment.text}</div>
+                    `;
+                commentsContainer.appendChild(commentElement);
+            });
+        } catch (error) {
+            console.error('Error loading comments:', error);
+        }
+    }
+
+    // Event listeners
+    newPostBtn.addEventListener('click', () => {
+        document.getElementById('author').value = getUsernameFromJWT();
+        postsView.style.display = 'none';
+        newPostForm.style.display = 'block';
+    });
+
+    cancelBtn.addEventListener('click', () => {
+        document.getElementById('author').value = '';
+        document.getElementById('title').value = '';
+        document.getElementById('content').value = '';
+
+        // Switch views
+        postsView.style.display = 'block';
+        newPostForm.style.display = 'none';
+    });
+
+    backLink.addEventListener('click', () => {
+        // Clear comment form if it exists
+        if (document.getElementById('commentAuthor')) {
+            document.getElementById('commentAuthor').value = '';
+            document.getElementById('commentText').value = '';
+        }
+
+        // Switch views
+        postDetailView.style.display = 'none';
+        postsView.style.display = 'block';
+    });
+
+    savePostBtn.addEventListener('click', async () => {
+        const author = document.getElementById('author').value;
+        const title = document.getElementById('title').value;
+        const content = document.getElementById('content').value;
+        const jwt = localStorage.getItem('jwt');
+
+        try {
+            const response = await fetch('http://localhost:8080/api/posts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${jwt}`
+                },
+                body: JSON.stringify({ author, title, content })
+            });
+
+            if (response.ok) {
+                // Clear form and show posts again
+                document.getElementById('author').value = '';
+                document.getElementById('title').value = '';
+                document.getElementById('content').value = '';
+                postsView.style.display = 'block';
+                newPostForm.style.display = 'none';
+
+                // Reload posts
+                await loadPosts();
+            }
+        } catch (error) {
+            console.error('Error saving post:', error);
+        }
+    });
+
+    submitCommentBtn.addEventListener('click', async () => {
+        const author = document.getElementById('commentAuthor').value;
+        const text = document.getElementById('commentText').value;
+        const jwt = localStorage.getItem('jwt');
+
+        try {
+            const response = await fetch(`http://localhost:8080/api/comments/${currentPostId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${jwt}`
+                },
+                body: JSON.stringify({ author, text })
+            });
+
+            if (response.ok) {
+                document.getElementById('commentAuthor').value = getUsernameFromJWT();
+                document.getElementById('commentText').value = '';
+
+                await loadComments(currentPostId);
+            }
+        } catch (error) {
+            console.error('Error submitting comment:', error);
+        }
+    });
+
+    loginBtn.addEventListener('click', async () => {
+        const username = document.getElementById('loginUsername').value;
+        const password = document.getElementById('loginPassword').value;
+
+        try {
+            const response = await fetch('http://localhost:8080/api/users/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+
+                // Ensure data.jwt exists
+                if (data.jwt) {
+                    localStorage.setItem('jwt', data.jwt);
+
+                    // Show posts view
+                    loginView.style.display = 'none';
+                    postsView.style.display = 'block';
+                    await loadPosts();
+                } else {
+                    alert('Login failed: No token received.');
+                }
+            } else {
+                const errorText = await response.text();
+                console.error('Login error response:', errorText);
+                alert('Login failed. Check credentials.');
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+            alert('Login failed due to a network or server error.');
+        }
+    });
+
+    function getUsernameFromJWT() {
+        const jwt = localStorage.getItem('jwt');
+        if (!jwt) return '';
+        try {
+            const payload = jwt.split('.')[1];
+            // Add padding if needed for base64 decoding
+            const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            const obj = JSON.parse(jsonPayload);
+            return obj.sub || '';
+        } catch (e) {
+            return '';
+        }
+    }
+
+    loginView.style.display = 'block';
+    postsView.style.display = 'none';
+    postDetailView.style.display = 'none';
+    newPostForm.style.display = 'none';
+
+</script>
+</body>
+</html>

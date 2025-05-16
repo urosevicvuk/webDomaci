@@ -1,17 +1,51 @@
 package rs.raf.entities;
 
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Post {
-    private Integer id;
-    private String title;
-    private String content;
-    private Date date;
 
-    public Post(String post_title, String post_content, Date post_date) {
-        this.title = post_title;
-        this.content = post_content;
-        this.date = post_date;
+    private Integer id;
+    private List<Comment> comments;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private LocalDateTime date;
+
+    @NotNull(message = "This field is required")
+    @NotEmpty(message = "This field is required")
+    private String author;
+
+    @NotNull(message = "This field is required")
+    @NotEmpty(message = "This field is required")
+    private String title;
+
+    @NotNull(message = "This field is required")
+    @NotEmpty(message = "This field is required")
+    private String content;
+
+    public Post() {
+        this.date = LocalDateTime.now();
+        this.comments = new ArrayList<>();
+    }
+
+    public Post(String author, String title, String content) {
+        this();
+        this.author = author;
+        this.title = title;
+        this.content = content;
+    }
+
+    public Post(Integer id, LocalDateTime date, String author, String title, String content) {
+        this.id = id;
+        this.date = date;
+        this.author = author;
+        this.title = title;
+        this.content = content;
     }
 
     public Integer getId() {
@@ -38,11 +72,27 @@ public class Post {
         this.content = content;
     }
 
-    public Date getDate() {
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setDate(LocalDateTime date) {
         this.date = date;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 }
