@@ -261,7 +261,12 @@
     // Load all posts
     async function loadPosts() {
         try {
-            const response = await fetch('http://localhost:8080/api/posts');
+            const jwt = localStorage.getItem('jwt');
+            const response = await fetch('http://localhost:8080/api/posts', {
+                headers: {
+                    'Authorization': `Bearer ${jwt}`
+                }
+            });
             const posts = await response.json();
 
             postsContainer.innerHTML = '';
@@ -294,7 +299,12 @@
     async function showPostDetail(postId) {
         try {
             // Load post
-            const postResponse = await fetch(`http://localhost:8080/api/posts/${postId}`);
+            const jwt = localStorage.getItem('jwt');
+            const postResponse = await fetch(`http://localhost:8080/api/posts/${postId}`, {
+                headears: {
+                    'Authorization': `Bearer ${jwt}`
+                }
+            });
             const post = await postResponse.json();
 
             // Format date
@@ -330,7 +340,12 @@
     // Load comments for a post
     async function loadComments(postId) {
         try {
-            const response = await fetch(`http://localhost:8080/api/comments/${postId}`);
+            const jwt = localStorage.getItem('jwt');
+            const response = await fetch(`http://localhost:8080/api/comments/${postId}`, {
+                headers: {
+                    'Authorization': `Bearer ${jwt}`
+                }
+            });
             const comments = await response.json();
 
             commentsContainer.innerHTML = '';
@@ -435,43 +450,41 @@
     });
 
     loginBtn.addEventListener('click', async () => {
-        loginBtn.addEventListener('click', async () => {
-            const username = document.getElementById('loginUsername').value;
-            const password = document.getElementById('loginPassword').value;
+        const username = document.getElementById('loginUsername').value;
+        const password = document.getElementById('loginPassword').value;
 
-            try {
-                const response = await fetch('http://localhost:8080/api/users/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ username, password })
-                });
+        try {
+            const response = await fetch('http://localhost:8080/api/users/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            });
 
-                if (response.ok) {
-                    const data = await response.json();
+            if (response.ok) {
+                const data = await response.json();
 
-                    // Ensure data.jwt exists
-                    if (data.jwt) {
-                        localStorage.setItem('jwt', data.jwt);
+                // Ensure data.jwt exists
+                if (data.jwt) {
+                    localStorage.setItem('jwt', data.jwt);
 
-                        // Show posts view
-                        loginView.style.display = 'none';
-                        postsView.style.display = 'block';
-                        await loadPosts();
-                    } else {
-                        alert('Login failed: No token received.');
-                    }
+                    // Show posts view
+                    loginView.style.display = 'none';
+                    postsView.style.display = 'block';
+                    await loadPosts();
                 } else {
-                    const errorText = await response.text();
-                    console.error('Login error response:', errorText);
-                    alert('Login failed. Check credentials.');
+                    alert('Login failed: No token received.');
                 }
-            } catch (error) {
-                console.error('Login error:', error);
-                alert('Login failed due to a network or server error.');
+            } else {
+                const errorText = await response.text();
+                console.error('Login error response:', errorText);
+                alert('Login failed. Check credentials.');
             }
-        });
+        } catch (error) {
+            console.error('Login error:', error);
+            alert('Login failed due to a network or server error.');
+        }
     });
 
     loginView.style.display = 'block';
