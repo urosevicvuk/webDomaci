@@ -34,6 +34,7 @@ public class Comment {
         this.author = author;
         this.text = text;
         this.blogPostId = blogPostId;
+        this.userId = userId;
     }
 
     public String getAuthor() {

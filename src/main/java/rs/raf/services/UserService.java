@@ -49,10 +49,6 @@ public class UserService {
 
         User user = this.userRepository.findUser(username);
 
-        if (user == null){
-            return false;
-        }
-
-        return true; //jwt.getSignature().equals(HelloApplication.getSecret());
+        return user != null;//jwt.getSignature().equals(HelloApplication.getSecret());
     }
 }

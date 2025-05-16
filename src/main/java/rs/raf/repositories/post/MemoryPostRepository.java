@@ -9,7 +9,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MemoryPostRepository implements PostRepository {
 
-    private static List<Post> posts = new CopyOnWriteArrayList<>();
+    private static final List<Post> posts = new CopyOnWriteArrayList<>();
 
     @Override
     public synchronized Post addPost(Post post) {

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MemoryUserRepository implements UserRepository {
-    private static List<User> USERS = new CopyOnWriteArrayList<>();
+    private static final List<User> USERS = new CopyOnWriteArrayList<>();
 
     static {
         USERS.add(new User("admin_user",  "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3")); // 123
