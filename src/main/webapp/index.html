@@ -435,31 +435,43 @@
     });
 
     loginBtn.addEventListener('click', async () => {
-        const username = document.getElementById('loginUsername').value;
-        const password = document.getElementById('loginPassword').value;
+        loginBtn.addEventListener('click', async () => {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
 
-        try {
-            const response = await fetch('http://localhost:8080/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username, password })
-            });
+            try {
+                const response = await fetch('http://localhost:8080/api/users/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
 
-            if (response.ok) {
-                const data = await response.json();
-                localStorage.setItem('jwt', data.jwt);
+                if (response.ok) {
+                    const data = await response.json();
 
-                loginView.style.display = 'none';
-                postsView.style.display = 'block';
-                loadPosts();
-            } else {
-                alert('Login failed. Check credentials.');
+                    // Ensure data.jwt exists
+                    if (data.jwt) {
+                        localStorage.setItem('jwt', data.jwt);
+
+                        // Show posts view
+                        loginView.style.display = 'none';
+                        postsView.style.display = 'block';
+                        await loadPosts();
+                    } else {
+                        alert('Login failed: No token received.');
+                    }
+                } else {
+                    const errorText = await response.text();
+                    console.error('Login error response:', errorText);
+                    alert('Login failed. Check credentials.');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                alert('Login failed due to a network or server error.');
             }
-        } catch (error) {
-            console.error('Login error:', error);
-        }
+        });
     });
 
     loginView.style.display = 'block';
