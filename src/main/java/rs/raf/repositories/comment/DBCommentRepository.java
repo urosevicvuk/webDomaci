@@ -24,7 +24,7 @@ public class DBCommentRepository extends DBAbstractRepository implements Comment
             preparedStatement.setString(1, comment.getAuthor());
             preparedStatement.setString(2, comment.getText());
             preparedStatement.setInt(3, postId);
-            preparedStatement.setInt(4, 0);
+            preparedStatement.setInt(4, 1);
             preparedStatement.executeUpdate();
             resultSet = preparedStatement.getGeneratedKeys();
 
@@ -48,13 +48,15 @@ public class DBCommentRepository extends DBAbstractRepository implements Comment
         List<Comment> comments = new ArrayList<>();
 
         Connection connection = null;
-        Statement statement = null;
+        PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
             connection = this.newConnection();
 
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery("select * from comment");
+            preparedStatement = connection.prepareStatement("SELECT * FROM comment WHERE comment_post = ?");
+            preparedStatement.setInt(1, postId);
+            preparedStatement.executeQuery();
+            resultSet = preparedStatement.getResultSet();
             while (resultSet.next()) {
                 comments.add(new Comment(
                         resultSet.getInt("comment_id"),
@@ -67,7 +69,7 @@ public class DBCommentRepository extends DBAbstractRepository implements Comment
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            this.closeStatement(statement);
+            this.closeStatement(preparedStatement);
             this.closeResultSet(resultSet);
             this.closeConnection(connection);
         }

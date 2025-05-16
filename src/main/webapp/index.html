@@ -301,7 +301,7 @@
             // Load post
             const jwt = localStorage.getItem('jwt');
             const postResponse = await fetch(`http://localhost:8080/api/posts/${postId}`, {
-                headears: {
+                headers: {
                     'Authorization': `Bearer ${jwt}`
                 }
             });

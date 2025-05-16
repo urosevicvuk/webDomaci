@@ -39,6 +39,9 @@ abstract public class DBAbstractRepository {
     }
 
     protected void closeStatement(Statement statement) {
+        if (statement == null) {
+            return;
+        }
         try {
             Optional.of(statement).get().close();
         } catch (SQLException throwables) {
@@ -47,6 +50,9 @@ abstract public class DBAbstractRepository {
     }
 
     protected void closeResultSet(ResultSet resultSet) {
+        if (resultSet == null) {
+            return;
+        }
         try {
             Optional.of(resultSet).get().close();
         } catch (SQLException throwables) {
@@ -55,6 +61,9 @@ abstract public class DBAbstractRepository {
     }
 
     protected void closeConnection(Connection connection) {
+        if (connection == null) {
+            return;
+        }
         try {
             Optional.of(connection).get().close();
         } catch (SQLException throwables) {
