@@ -321,6 +321,8 @@
             // Load comments
             await loadComments(postId);
 
+            document.getElementById("commentAuthor").value = getUsernameFromJWT();
+
             // Switch views
             postsView.style.display = 'none';
             postDetailView.style.display = 'block';
@@ -365,6 +367,7 @@
 
     // Event listeners
     newPostBtn.addEventListener('click', () => {
+        document.getElementById('author').value = getUsernameFromJWT();
         postsView.style.display = 'none';
         newPostForm.style.display = 'block';
     });
@@ -439,7 +442,7 @@
             });
 
             if (response.ok) {
-                document.getElementById('commentAuthor').value = '';
+                document.getElementById('commentAuthor').value = getUsernameFromJWT();
                 document.getElementById('commentText').value = '';
 
                 await loadComments(currentPostId);
@@ -486,6 +489,23 @@
             alert('Login failed due to a network or server error.');
         }
     });
+
+    function getUsernameFromJWT() {
+        const jwt = localStorage.getItem('jwt');
+        if (!jwt) return '';
+        try {
+            const payload = jwt.split('.')[1];
+            // Add padding if needed for base64 decoding
+            const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            const obj = JSON.parse(jsonPayload);
+            return obj.sub || '';
+        } catch (e) {
+            return '';
+        }
+    }
 
     loginView.style.display = 'block';
     postsView.style.display = 'none';
